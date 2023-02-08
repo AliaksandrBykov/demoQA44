@@ -1,3 +1,4 @@
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
@@ -17,10 +18,14 @@ public class PhoneBookFirstTest {
     public  void  setUp() {
         driver = new ChromeDriver();
         driver.manage().window().maximize();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(40));
         driver.get("http://phonebook.telran-edu.de:8080/user/login");
     }
 
+    @AfterMethod
+    public void  tearDown() {
+        driver.quit();
+    }
 
     @Test
     public void shouldBeRightTitle() {
@@ -28,8 +33,17 @@ public class PhoneBookFirstTest {
         Assert.assertEquals(login, "PhonebookUi", "False");
     }
 
-    @AfterMethod
-    public void  tearDown() {
-        driver.quit();
+
+    @Test
+    public void  searchPhonebook() {
+//        driver.findElement(By.id("L2AGLb")).click();
+        driver.findElement(By.name("email")).sendKeys("test@gmail.com");
+        driver.findElement(By.name("password")).sendKeys("test@gmail.com");
+        driver.findElement(By.className("btn")).click();
+
+        Assert.assertTrue(driver.findElement(By.xpath("//button[contains(text(), 'Bakanov ')]")).isDisplayed());
+
+
     }
+
 }

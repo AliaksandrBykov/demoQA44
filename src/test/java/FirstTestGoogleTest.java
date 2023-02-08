@@ -1,3 +1,4 @@
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
@@ -24,6 +25,10 @@ public class FirstTestGoogleTest {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30)); // Ожидание (Время ожидание элементов)
         driver.get("https://www.google.com/"); // ссылка на браузер
     }
+    @AfterMethod
+    public void  tearDown() {
+        driver.quit(); // закрывает браузер
+    }
 
     @Test
     public void shouldBeRightTitle() {
@@ -32,9 +37,18 @@ public class FirstTestGoogleTest {
     }
 
 
-    @AfterMethod
-    public void  tearDown() {
-        driver.quit(); // закрывает браузер
+    @Test
+    public void  searchGoogle() {
+        driver.findElement(By.id("L2AGLb")).click();
+        driver.findElement(By.name("q")).clear();// очистка поля (clear)
+        driver.findElement(By.name("q")).sendKeys("Tel.Ran"); // Команда для записи текста в поле поиска Браузера
+        driver.findElement(By.name("btnK")).click(); // нажать на элемент
+
+        Assert.assertTrue(driver.getPageSource().contains("Tel-Ran.de")); // Проверка есть ли эта строка или нету
+
+        String actualText = driver.findElement(By.id("hdtb-tls")).getText();
+        String expectedText = "Narzędzia";
+        Assert.assertEquals(actualText, expectedText,  "False");
     }
 
 
