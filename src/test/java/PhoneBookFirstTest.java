@@ -8,24 +8,9 @@ import org.testng.annotations.Test;
 
 import java.time.Duration;
 
-public class PhoneBookFirstTest {
-
-    WebDriver driver;
+public class PhoneBookFirstTest extends TestBase { // extends Унаследование класса
 
     String login;
-
-    @BeforeMethod
-    public  void  setUp() {
-        driver = new ChromeDriver();
-        driver.manage().window().maximize();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(40));
-        driver.get("http://phonebook.telran-edu.de:8080/user/login");
-    }
-
-    @AfterMethod
-    public void  tearDown() {
-        driver.quit();
-    }
 
     @Test
     public void shouldBeRightTitle() {
@@ -45,5 +30,67 @@ public class PhoneBookFirstTest {
 
 
     }
+
+    By addNewContact = By.xpath("//*[@class='btn btn-info my-1 btn-block']");
+
+    By fistNameImput = By.xpath("//*[@id='form-name']");
+
+    By lastNameImput = By.xpath("//*[@id='form-lastName']");
+
+    By aboutImput = By.xpath("//*[@id='form-about']");
+
+    By saveButton = By.xpath("//*[@class='btn btn-primary']");
+
+    By fistNameField = By.xpath("//div[@id='contact-first-name']");
+    By lastNameField = By.xpath("//div[@id='contact-last-name']");
+
+    By contactDescription = By.xpath("//div[@id='contact-description']");
+
+    @Test
+    public void loginTest() {
+        driver.findElement(By.xpath("//*[@id='defaultRegisterFormEmail'")).clear();
+        driver.findElement(By.xpath("//*[@id='defaultRegisterFormEmail'")).sendKeys("test@gmail.com");
+        driver.findElement(By.xpath("//*[@name='password']")).clear();
+        driver.findElement(By.xpath("//*[@name='password']")).sendKeys("test@gmail.com");
+        driver.findElement(By.xpath("//*[@class='btn btn-info my-1 btn-block']")).click();
+
+
+        Assert.assertTrue(driver.findElement(By.xpath("//ul[@class='navbar-nav mr-auto']/li[last()]")).isDisplayed());
+        Assert.assertEquals(driver.getCurrentUrl(), "http://phonebook.telran-edu.de:8080/contacts");
+
+    }
+
+    public void getAuth() {
+        driver.findElement(By.xpath("//*[@id='defaultRegisterFormEmail'")).clear();
+        driver.findElement(By.xpath("//*[@id='defaultRegisterFormEmail'")).sendKeys("test@gmail.com");
+        driver.findElement(By.xpath("//*[@name='password']")).clear();
+        driver.findElement(By.xpath("//*[@name='password']")).sendKeys("test@gmail.com");
+        driver.findElement(By.xpath("//*[@class='btn btn-info my-1 btn-block']")).click();
+
+    }
+
+    @Test
+    public  void addNewContactTest() {
+        String firsName = "Pater";
+        String lastName = "Bolt";
+        String about = "Peter is my friend";
+        getAuth();
+        driver.findElement(addNewContact).click();
+        driver.findElement(fistNameImput).clear();
+        driver.findElement(fistNameImput).sendKeys("Pater");
+        driver.findElement(lastNameImput).clear();
+        driver.findElement(lastNameImput).sendKeys("Bolt");
+        driver.findElement(aboutImput).clear();
+        driver.findElement(aboutImput).sendKeys("Peter is my friend");
+        driver.findElement(saveButton).click();
+
+        Assert.assertEquals(driver.findElement(fistNameField).getText(),firsName);
+        Assert.assertEquals(driver.findElement(lastNameField).getText(),lastName);
+        Assert.assertEquals(driver.findElement(contactDescription).getText(),about);
+
+
+
+    }
+
 
 }
